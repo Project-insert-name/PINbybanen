@@ -1,18 +1,24 @@
 package PIN.Bybane;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
+/**
+ * This is a template class for testing
+ */
 @RestController
 public class RESTapi {
-    //This is a template class for testing
+
+    private final UpdateThread data;
+
+    public RESTapi() {
+        data = new UpdateThread();
+        Thread thread = new Thread(data);
+        thread.setDaemon(true);
+        thread.start();
+    }
 
     @GetMapping("/hi")
     String all() {
@@ -22,6 +28,11 @@ public class RESTapi {
     @PostMapping("/magicbutpost")
     Integer magicbutpost(@RequestBody Integer newINT) {
         return newINT;
+    }
+
+    @GetMapping("/bybanen")
+    Object getLatestData() {
+        return data.getLatest();
     }
 
 }
