@@ -16,22 +16,26 @@ public class UpdateThread implements Runnable {
 
     @Override
     public void run() {
+        //noinspection InfiniteLoopStatement
         while (true) {
 
             RestTemplate restTemplate = new RestTemplate();
-            String bybanen = restTemplate.getForObject(URL, String.class);
+            String apiData = restTemplate.getForObject(URL, String.class);
 
-            if (bybanen == null) return;
-
-            JSONParser parser = new JSONParser(bybanen);
-
-            try {
-                latest = parser.parse();
-                //noinspection BusyWait
-                Thread.sleep(UPDATE_INTERVAL);
+            if (apiData == null) {
+                throw new NullPointerException("apiData is null");
             }
-            catch (ParseException | InterruptedException e) {
-                System.err.println(e.getMessage());
+            else {
+                JSONParser parser = new JSONParser(apiData);
+
+                try {
+                    latest = parser.parse();
+                    //noinspection BusyWait
+                    Thread.sleep(UPDATE_INTERVAL);
+                }
+                catch (ParseException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
